@@ -1,22 +1,3 @@
-"""
-downstream_classifier.py
-==========================
-The actual test of whether the SAE features are worth the trouble:
-does replacing raw bands (or PCA components) with SAE latent codes improve
-EARLY-STAGE detection specifically — low severity, where the signal is
-faint and where all the financial value lives (catching stress before it's
-priced in)?
-
-Three feature sets, same classifier (Random Forest, CPU, seconds to train):
-  1. raw_bands   : all 375 usable bands directly
-  2. pca         : PCA to same dimensionality as typical hand-picked indices
-  3. sae_codes   : SAE latent activations (sparse, high-dim)
-
-Reported at TWO severity regimes:
-  - all severities (easy — includes fully-expressed disease/alteration)
-  - low severity only (severity < 0.3) — the hard, financially relevant case
-"""
-
 import numpy as np
 from sklearn.decomposition import PCA
 from sklearn.ensemble import RandomForestClassifier
