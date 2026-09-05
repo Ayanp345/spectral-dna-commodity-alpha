@@ -468,4 +468,3 @@ Core Idea
                   Portfolio Alpha
 
 Spectral information → interpretable features → real-world signals → quantitative decision framework.
- 
