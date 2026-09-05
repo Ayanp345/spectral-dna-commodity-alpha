@@ -1,6 +1,6 @@
 # Spectral DNA Fingerprinting → Commodity Alpha Generation
 
-End-to-end pipeline: unsupervised Sparse Autoencoder (SAE) decomposition of
+ unsupervised Sparse Autoencoder (SAE) decomposition of
 hyperspectral pixel spectra → interpretable "monosemantic spectral features"
 (MSFs) → early crop-stress / mineral-alteration detection → commodity supply
 forecast → options Greeks re-pricing → Jensen's Alpha portfolio backtest.
@@ -175,5 +175,4 @@ spectral_sae_alpha/
    over PCA on accuracy alone; the case for SAE here is interpretability and
    (untested-on-real-data) robustness to nonlinear superposition, not raw
    predictive lift.
-#   s p e c t r a l - d n a - c o m m o d i t y - a l p h a 
  
