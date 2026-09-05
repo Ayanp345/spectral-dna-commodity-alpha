@@ -1,25 +1,3 @@
-"""
-feature_interpretation.py
-==========================
-Turns raw SAE latent codes into a human-readable "feature dashboard" —
-the mechanistic-interpretability step that makes this useful to a geologist
-or agronomist instead of just a data scientist.
-
-For each latent feature j:
-  1. Find the top-N pixels that activate it most strongly.
-  2. Average their raw spectra, subtract the population mean spectrum
-     -> isolates the "characteristic absorption signature" the feature fires on.
-  3. Find the wavelength of maximum (negative) deviation -> that's the
-     feature's diagnostic absorption center.
-  4. Match that wavelength (within tolerance) against USGS_LIKE_LIBRARY
-     from spectral_physics_simulator.py -> auto-label the feature, e.g.:
-         MSF_0142  ->  "Kaolinite Al-OH doublet (b)" (match @2208nm, dist=3nm)
-  5. Report class purity: of the pixels that activate this feature, what
-     fraction share the same ground-truth label? A monosemantic feature
-     should have high purity even though it was never given labels during
-     SAE training (fully unsupervised).
-"""
-
 import numpy as np
 from collections import Counter
 
