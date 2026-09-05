@@ -175,5 +175,5 @@ spectral_sae_alpha/
    over PCA on accuracy alone; the case for SAE here is interpretability and
    (untested-on-real-data) robustness to nonlinear superposition, not raw
    predictive lift.
-#   s p e c t r a l - d n a - c o m m o d i t y - a l p h a  
+#   s p e c t r a l - d n a - c o m m o d i t y - a l p h a 
  
