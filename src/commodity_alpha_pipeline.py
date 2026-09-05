@@ -1,44 +1,7 @@
-"""
-commodity_alpha_pipeline.py
-==============================
-Closes the loop from "unsupervised spectral feature" to "portfolio decision".
-
-Chain:
-  1. SAE stress score S_t (mean activation of disease/water-stress-matched
-     MSFs, aggregated over a field/region on date t) is generated WEEKS
-     before harvest, ahead of USDA/official yield estimates.
-  2. Map S_t -> forecast yield anomaly (Delta-yield vs trend), via a
-     regression calibrated on (simulated) historical S_t / yield-anomaly
-     pairs -- this is the "early-warning" step.
-  3. Map yield anomaly -> commodity supply shock -> expected futures price
-     move, using a constant-elasticity supply/demand relationship (a
-     standard agricultural-economics approximation: price % change =
-     -elasticity_inverse * quantity % change, calibrated to historical
-     USDA-corn-style elasticities in the -0.3 to -0.5 short-run range,
-     meaning a 1% supply shortfall moves price ~2-3%).
-  4. Options layer: Black-Scholes Delta & Vega for a book of calls/puts
-     across strikes, BEFORE vs AFTER re-pricing the underlying and implied
-     vol off the forecast supply shock -- shows exactly how early spectral
-     detection should reprice a derivatives book before the rest of the
-     market reacts to the eventual USDA report.
-  5. Portfolio layer: a commodity-heavy portfolio's simulated returns are
-     regressed against a benchmark (CAPM) to get Jensen's Alpha, with vs
-     without the spectral-signal overlay strategy, using Newey-West-robust
-     OLS (via numpy, no statsmodels needed) for correct alpha significance
-     under autocorrelated commodity returns.
-
-All numbers here (elasticities, IV levels, portfolio weights) are FROM
-PUBLISHED RANGES for grains/agricultural commodities and are clearly labeled
-as assumptions -- not fitted to any live feed, since none is available here.
-"""
-
 import numpy as np
 from scipy.stats import norm
 
-
-# ---------------------------------------------------------------------------
-# 1-2. Spectral stress score -> yield anomaly
-# ---------------------------------------------------------------------------
+-
 
 def stress_score_to_yield_anomaly(stress_score, calib_slope=-0.42, calib_intercept=0.0,
                                    noise_sigma=0.015, rng=None):
@@ -57,10 +20,6 @@ def stress_score_to_yield_anomaly(stress_score, calib_slope=-0.42, calib_interce
     return yield_anomaly
 
 
-# ---------------------------------------------------------------------------
-# 3. Yield anomaly -> supply shock -> price impact (constant elasticity)
-# ---------------------------------------------------------------------------
-
 def yield_anomaly_to_price_impact(yield_anomaly, supply_elasticity=0.35):
     """
     Short-run price elasticity of supply for grains is well-documented in the
@@ -71,9 +30,6 @@ def yield_anomaly_to_price_impact(yield_anomaly, supply_elasticity=0.35):
     return -yield_anomaly / supply_elasticity
 
 
-# ---------------------------------------------------------------------------
-# 4. Black-Scholes Greeks, before/after re-pricing on the forecast
-# ---------------------------------------------------------------------------
 
 def bs_price_and_greeks(S, K, T, r, sigma, option_type="call"):
     d1 = (np.log(S / K) + (r + 0.5 * sigma ** 2) * T) / (sigma * np.sqrt(T))
@@ -116,9 +72,6 @@ def greeks_scenario_table(S0, price_impact_pct, strikes, T=60/365, r=0.05,
     return rows
 
 
-# ---------------------------------------------------------------------------
-# 5. Portfolio backtest + Jensen's Alpha (Newey-West robust)
-# ---------------------------------------------------------------------------
 
 def newey_west_ols(y, X, lags=4):
     """OLS with Newey-West HAC standard errors, pure numpy (no statsmodels
