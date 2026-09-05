@@ -1,30 +1,4 @@
-"""
-sae_numpy_reference.py
-========================
-Pure NumPy re-implementation of the SAME L1-Sparse Autoencoder math as
-spectral_sae.py's L1SparseAutoencoder — hand-derived forward/backward pass,
-no autograd. This exists SOLELY because this sandbox has no internet access
-to install PyTorch, and I will not fake a "torch ran successfully" result.
-
-This lets me:
-  - actually execute and validate the full pipeline right now, on CPU,
-    with zero external dependencies beyond numpy
-  - produce real (not hypothetical) numbers, plots, and a feature dashboard
-    in this conversation
-  - give you high confidence the Colab PyTorch notebook (spectral_sae.py)
-    will behave the same way, since it's the identical loss function,
-    architecture, and update rule — just accelerated + autograd'd.
-
-Model:  x -> ReLU(W_enc x + b_enc) = z  -> W_dec z + b_dec = x_hat
-Loss :  ||x - x_hat||^2  +  l1_coeff * mean(|z|)
-Update: vanilla Adam, decoder columns renormalized to unit norm each step
-        (exactly matching the tied/normalized-decoder trick used in the
-        torch version, which prevents the trivial "shrink activations,
-        grow decoder norm" degenerate solution).
-"""
-
 import numpy as np
-
 
 class NumpyAdam:
     def __init__(self, shapes, lr=1e-3, b1=0.9, b2=0.999, eps=1e-8):
